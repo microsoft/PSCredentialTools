@@ -352,7 +352,7 @@ New-ADUser -Name $Credential.Username -AccountPassword $Credential.Password -Ena
     $ExportParameters = $PSBoundParameters
     $ExportParameters.Add('Credential',$Credential)
 
-    Export-PSCredential @ExportParameters
+    Export-PSCredential @ExportParameters | Out-Null
 
     return $Credential
 
