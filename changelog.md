@@ -6,4 +6,4 @@
 
 ## 1.0
 
-- Initial release of PSCredentialManager
+- Initial release of pscredentialtools
