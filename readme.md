@@ -1,8 +1,8 @@
-#PSCredentialManager
+#PSCredentialTools
 
-PSCredentialManager provides methods for securly generating, storing and retrieving credentials and other sensitive data for use in PowerShell scripts and Desired State Configurations. Credentials can be saved to disk, encrypted with either a pre-shared-key or with a PKI certificate. Credentials can also be stored in Azure KeyVault as an Azure KeyVault Secret.
+PSCredentialTools provides methods for securly generating, storing and retrieving credentials and other sensitive data for use in PowerShell scripts and Desired State Configurations. Credentials can be saved to disk, encrypted with either a pre-shared-key or with a PKI certificate. Credentials can also be stored in Azure KeyVault as an Azure KeyVault Secret.
 
-PSCredentialManager includes the following cmdlets
+PSCredentialTools includes the following cmdlets
 *   Export-PSCredential: encrypts and saves a PowerShell Credential object to file or to Azure KeyVault
 *   Import-PSCredential: decrypts a previously saved Credential back into a PowerShell Credential object
 *   New-PSCredential: creates new PowerShell credential object, with a random strong password, and saves it to an encrypted file or to Azure KeyVault

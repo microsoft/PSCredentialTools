@@ -4,6 +4,6 @@
 * fix New-PSCredential returning more than the Credential object when using KeyVault storage
 
 ## 1.0
-* Initial release of PSCredentialManager
+* Initial release of PSCredentialTools
 
 
