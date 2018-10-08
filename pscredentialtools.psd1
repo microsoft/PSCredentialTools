@@ -22,20 +22,21 @@
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     NestedModules     = @(
-        "Functions\EncryptionFunctions.ps1"
-        "Functions\PSCredential.ps1"
-        "Functions\InternalFunctions.ps1"
+        '.\Functions\ConvertFrom-FipsSecureString.ps1'
+        'Functions\EncryptionFunctions.ps1'
+        'Functions\PSCredential.ps1'
+        'Functions\InternalFunctions.ps1'
     )
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @(
-        "Export-PSCredential"
-        "Import-PSCredential"
-        "New-PSCredential"
-        "ConvertFrom-FIPSSecureString"
-        "ConvertTo-FIPSSecureString"
-        "ConvertTo-PKISecureString"
-        "ConvertFrom-PKISecureString"
+        'Export-PSCredential'
+        'Import-PSCredential'
+        'New-PSCredential'
+        'ConvertFrom-FIPSSecureString'
+        'ConvertTo-FIPSSecureString'
+        'ConvertTo-PKISecureString'
+        'ConvertFrom-PKISecureString'
     )
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
