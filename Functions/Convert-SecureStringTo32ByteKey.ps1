@@ -1,4 +1,17 @@
-function Convert-SecureStringto32ByteKey
+<#
+	.SYNOPSIS
+		Convert a secure string to a byte array.
+	
+	.DESCRIPTION
+		Convert the supplied secure string to a 32 byte array.
+	
+	.PARAMETER SecureString
+		A secure string object.
+	
+	.EXAMPLE
+		Convert-SecureStringTo32ByteKey -SecureString ( ConvertTo-SecureString -String 'Pr3$haredK3y' -AsPlainText -Force )
+#>
+function Convert-SecureStringTo32ByteKey
 {
 	[CmdletBinding()]
 	param
