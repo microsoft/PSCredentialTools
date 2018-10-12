@@ -1,6 +1,6 @@
 @{
     # Version number of this module.
-    ModuleVersion     = '1.0.1'
+    ModuleVersion     = '1.0.2'
 
     # ID used to uniquely identify this module
     GUID              = '89b06e4f-42a4-4d7b-bb59-495e35d0b270'
@@ -22,10 +22,15 @@
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     NestedModules     = @(
-        '.\Functions\ConvertFrom-FipsSecureString.ps1'
-        'Functions\EncryptionFunctions.ps1'
-        'Functions\PSCredential.ps1'
-        'Functions\InternalFunctions.ps1'
+        'Functions\Convert-SecureStringto32ByteKey.ps1'
+        'Functions\ConvertFrom-FipsSecureString.ps1'
+        'Functions\ConvertFrom-PKISecureString.ps1'
+        'Functions\ConvertTo-FIPSSecureString.ps1'
+        'Functions\ConvertTo-PKISecureString.ps1'
+        'Functions\Export-PSCredential.ps1'
+        'Functions\Import-PSCredential.ps1'
+        'Functions\New-Password.ps1'
+        'Functions\New-PSCredential.ps1'        
     )
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
