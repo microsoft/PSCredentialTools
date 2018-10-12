@@ -15,9 +15,9 @@
         Specifies the certifcate store of the specified certificate thumbprint. Either LocalMachine or CurrentUser.
 
     .EXAMPLE
-        Encrypt a SecureString object and save it to disk
-        $EncryptedText = ConvertFrom-PKISecureString -SecureString $MySecretValue -Thumbprint '87BB70A19A7671D389F49AF4C9608B2F381FDD80'
-        $EncryptedText | Out-File ./encryptedText.txt
+        ConvertFrom-PKISecureString -SecureString $MySecretValue -Thumbprint '87BB70A19A7671D389F49AF4C9608B2F381FDD80' | Out-File ./encryptedText.txt
+
+        Encrypts a SecureString object and saves it to disk.
 #>
 function ConvertFrom-PKISecureString
 {

@@ -14,7 +14,7 @@
 
     .EXAMPLE
         $EncryptedText = Get-Content ./encryptedText.txt
-        $MySecret = ConvertTo-FIPSSecureString -EncryptedString $EncryptedText -SecureKey ('Pr3$haredK3y' | Convertto-SecureString -AsPlainText -Force)
+        $MySecret = ConvertTo-FIPSSecureString -EncryptedString $EncryptedText -SecureKey ( ConvertTo-SecureString -String 'Pr3$haredK3y' -AsPlainText -Force )
 #>
 function ConvertTo-FIPSSecureString
 {

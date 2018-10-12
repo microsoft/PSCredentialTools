@@ -1,6 +1,6 @@
 <#
     .SYNOPSIS
-        Create a new PowerShell Credential object with a random password. Encrypts and saves the Credential object to file or to Azure KeyVault
+        Create a new PowerShell Credential object with a random password. Encrypts and saves the Credential object to file or to Azure KeyVault.
 
     .DESCRIPTION
         New-PSCredential is used to create a new  PowerShell Credential object [System.Management.Automation.PSCredential] with the provided username and
@@ -32,9 +32,10 @@
         The name of the Azure KeyVault secret to create that will be used to store the exported credential.
 
     .EXAMPLE
-        Creating a credential to be used as a service account, and creating the account.
         $Credential = New-PSCredential -Username 'svc.SharePoint.farm' -Path ./savedcredential.json -Thumbprint '87BB70A19A7671D389F49AF4C9608B2F381FDD80'
         New-ADUser -Name $Credential.Username -AccountPassword $Credential.Password -Enabled:$true
+
+        Creating a credential to be used as a service account, and creating the account.
 #>
 function New-PSCredential
 {
