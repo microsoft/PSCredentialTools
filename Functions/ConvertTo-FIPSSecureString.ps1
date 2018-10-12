@@ -40,7 +40,7 @@ function ConvertTo-FIPSSecureString
 
     if ($PSBoundParameters.ContainsKey('SecureKey'))
     {
-        $key = Convert-SecureStringto32ByteKey -SecureString $SecureKey
+        $key = Convert-SecureStringTo32ByteKey -SecureString $SecureKey
     }
 
     if ($null -eq $key -or $key.GetLength(0) -ne 32)

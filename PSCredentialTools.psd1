@@ -22,7 +22,7 @@
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     NestedModules     = @(
-        'Functions\Convert-SecureStringto32ByteKey.ps1'
+        'Functions\Convert-SecureStringTo32ByteKey.ps1'
         'Functions\ConvertFrom-FipsSecureString.ps1'
         'Functions\ConvertFrom-PKISecureString.ps1'
         'Functions\ConvertTo-FIPSSecureString.ps1'
