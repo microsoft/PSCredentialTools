@@ -1,11 +1,29 @@
+<#
+	.SYNOPSIS
+		Generates a new password.
+	
+	.DESCRIPTION
+		Creates a new randomly generated password which adhears to strong password standards.
+	
+	.PARAMETER Length
+		The number of characters the password will contain.
+	
+	.EXAMPLE
+		New-Password
+		R(9s?.rmX*Z45lP
+
+	.Example
+		New-Password -Length 24
+		i7K#9*cKAPvi8a.yS&8U7W)
+#>
 function New-Password
 {
 	[CmdletBinding()]
 	param
     (
         [Parameter()]
-        [System.Int32]
-        $length = 16
+        [System.Int16]
+        $Length = 16
 	)
 
 	$lowers = 'abcdefghiklmnprstuvwxyz'
@@ -29,12 +47,12 @@ function New-Password
 	$password += $specials[(Get-Random -Maximum $specials.length)]
 	$password += $specials[(Get-Random -Maximum $specials.length)]
 	#fill the rest with random from all categories
-	for ($n=1;$n -le ($length - 8); $n++ ){
+	for ($n=1;$n -le ($Length - 8); $n++ ){
 		$password += $all[(Get-Random -Maximum $all.length)]
 	}
 
 	#mix it up
-	$indices = Get-Random -inputobject (0.. ($length -1)) -Count ($length -1)
+	$indices = Get-Random -inputobject (0.. ($Length -1)) -Count ($Length -1)
 	$private:ofs=''
 	return [System.String]$password[$indices]
 }
