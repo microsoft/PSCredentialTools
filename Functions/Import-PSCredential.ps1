@@ -26,16 +26,19 @@
         The name of the Azure KeyVault secret that contains the exported credential.
 
     .EXAMPLE
+        $Credential = Import-PSCredential -Path ./savedcredential.json -SecureKey ( Convertto-SecureString -String '$ecretK3y' -AsPlainText -Force )
+
         Import a credential from file using a pre-shared key.
-        $Credential = Import-PSCredential -Path ./savedcredential.json -SecureKey ('$ecretK3y' | Convertto-SecureString -AsPlainText -Force)
 
     .EXAMPLE
-        Import a credential from file using a Certificate
         $Credential = Import-PSCredential -Path ./savedcredential.json -Thumbprint '87BB70A19A7671D389F49AF4C9608B2F381FDD80'
 
+        Import a credential from file using a Certificate.
+
     .EXAMPLE
-        Import a credential from an Azure KeyVault. The user executing the script must be authenticated to Azure with sufficient permissions to the KeyVault.
         $Credential = Import-PSCredential -KeyVault 'My-KeyVault' -SecretName 'SavedCred-Secret'
+
+        Import a credential from an Azure KeyVault. The user executing the script must be authenticated to Azure with sufficient permissions to the KeyVault.
 #>
 function Import-PSCredential
 {

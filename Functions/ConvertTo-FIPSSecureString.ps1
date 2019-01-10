@@ -14,7 +14,7 @@
 
     .EXAMPLE
         $EncryptedText = Get-Content ./encryptedText.txt
-        $MySecret = ConvertTo-FIPSSecureString -EncryptedString $EncryptedText -SecureKey ('Pr3$haredK3y' | Convertto-SecureString -AsPlainText -Force)
+        $MySecret = ConvertTo-FIPSSecureString -EncryptedString $EncryptedText -SecureKey ( ConvertTo-SecureString -String 'Pr3$haredK3y' -AsPlainText -Force )
 #>
 function ConvertTo-FIPSSecureString
 {
@@ -40,7 +40,7 @@ function ConvertTo-FIPSSecureString
 
     if ($PSBoundParameters.ContainsKey('SecureKey'))
     {
-        $key = Convert-SecureStringto32ByteKey -SecureString $SecureKey
+        $key = Convert-SecureStringTo32ByteKey -SecureString $SecureKey
     }
 
     if ($null -eq $key -or $key.GetLength(0) -ne 32)

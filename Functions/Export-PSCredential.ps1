@@ -32,16 +32,19 @@
         The name of the Azure KeyVault secret to create that will be used to store the exported credential.
 
     .EXAMPLE
+        $Credential | Export-PSCredential -Path ./savedcredential.json -SecureKey ( Convertto-SecureString -String '$ecretK3y' -AsPlainText -Force)
+
         Export a credential to file using a pre-shared key.
-        $Credential | Export-PSCredential -Path ./savedcredential.json -SecureKey ('$ecretK3y' | Convertto-SecureString -AsPlainText -Force)
 
     .EXAMPLE
-        Export a credential to file using a Certificate
         $Credential | Export-PSCredential -Path ./savedcredential.json -Thumbprint '87BB70A19A7671D389F49AF4C9608B2F381FDD80'
 
+        Export a credential to file using a Certificate.
+
     .EXAMPLE
-        Export a credential to an existing Azure KeyVault. The user executing the script must be authenticated to Azure with sufficient permissions to the KeyVault.
         $Credential | Export-PSCredential -KeyVault 'My-KeyVault' -SecretName 'SavedCred-Secret'
+
+        Export a credential to an existing Azure KeyVault. The user executing the script must be authenticated to Azure with sufficient permissions to the KeyVault.
 #>
 function Export-PSCredential
 {

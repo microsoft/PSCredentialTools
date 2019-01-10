@@ -13,9 +13,9 @@
         A SecureString that will be converted into a 32 byte array used as the pre-shared key for encryption.
 
     .EXAMPLE
-        Encrypt a SecureString object and save it to disk
-        $EncryptedText = ConvertFrom-FIPSSecureString -SecureString $MySecretValue -SecureKey ('Pr3$haredK3y' | Convertto-SecureString -AsPlainText -Force)
-        $EncryptedText | Out-File ./encryptedText.txt
+        ConvertFrom-FIPSSecureString -SecureString $MySecretValue -SecureKey  ( ConvertTo-SecureString -String 'Pr3$haredK3y' -AsPlainText -Force ) | Out-File ./encryptedText.txt
+
+        Encrypts a SecureString object and saves it to disk.
 #>
 function ConvertFrom-FIPSSecureString
 {
@@ -41,7 +41,7 @@ function ConvertFrom-FIPSSecureString
 
     if ($PSBoundParameters.ContainsKey('SecureKey'))
     {
-        $Key = Convert-SecureStringto32ByteKey -SecureString $SecureKey
+        $Key = Convert-SecureStringTo32ByteKey -SecureString $SecureKey
     }
 
     if ($null -eq $Key -or $Key.GetLength(0) -ne 32)

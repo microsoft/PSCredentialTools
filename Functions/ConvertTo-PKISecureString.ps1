@@ -12,9 +12,10 @@
         Specifies the certifcate store of the specified certificate thumbprint. Either LocalMachine or CurrentUser.
 
     .EXAMPLE
-        Read an encrypted string from disk and decrypt it back into a SecureString
         $EncryptedText = Get-Content ./encryptedText.txt
         $MySecretValue = ConvertTo-PKISecureString -EncryptedString $EncryptedValue -Thumbprint '87BB70A19A7671D389F49AF4C9608B2F381FDD80'
+        
+        Reads an encrypted string from disk and decrypts it back into a SecureString.
 #>
 function ConvertTo-PKISecureString
 {
