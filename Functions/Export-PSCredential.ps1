@@ -51,60 +51,65 @@ function Export-PSCredential
     [CmdletBinding()]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName="LocalKey",Position=1,ValueFromPipeline=$true)]
-        [Parameter(Mandatory = $true, ParameterSetName="KeyVault",Position=1,ValueFromPipeline=$true)]
-        [Parameter(Mandatory = $true, ParameterSetName="CertificateThumbprint",Position=1,ValueFromPipeline=$true)]
-        [Parameter(Mandatory = $true, ParameterSetName="CertFile",Position=1,ValueFromPipeline=$true)]
+        [Parameter(Mandatory = $true, ParameterSetName = "LocalKey", Position = 1, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = "KeyVault", Position = 1, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = "CertificateThumbprint", Position = 1, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = "CertFile", Position = 1, ValueFromPipeline = $true)]
         [ValidateNotNullorEmpty()]
         [System.Management.Automation.PSCredential]
         $Credential,
 
-        [Parameter(Mandatory = $true, ParameterSetName="LocalKey",Position=2)]
-        [Parameter(Mandatory = $true, ParameterSetName="CertificateThumbprint",Position=2)]
-        [Parameter(Mandatory = $true, ParameterSetName="CertFile",Position=2)]
+        [Parameter(Mandatory = $true, ParameterSetName = "LocalKey", Position = 2)]
+        [Parameter(Mandatory = $true, ParameterSetName = "CertificateThumbprint", Position = 2)]
+        [Parameter(Mandatory = $true, ParameterSetName = "CertFile", Position = 2)]
         [ValidateNotNullorEmpty()]
         [System.String]
         $Path,
 
-        [Parameter(Mandatory = $true, ParameterSetName="LocalKey")]
+        [Parameter(Mandatory = $true, ParameterSetName = "LocalKey")]
         [ValidateNotNullorEmpty()]
         [System.Security.SecureString]
         $SecureKey,
 
-        [Parameter(Mandatory = $true, ParameterSetName="CertificateThumbprint")]
+        [Parameter(Mandatory = $true, ParameterSetName = "CertificateThumbprint")]
         [ValidateNotNullorEmpty()]
         [System.String]
         $Thumbprint,
 
-        [Parameter(Mandatory = $true, ParameterSetName="CertFile",Position=1,ValueFromPipeline=$true)]
-        [ValidateScript({test-path $_})]
+        [Parameter(Mandatory = $true, ParameterSetName = "CertFile", Position = 1, ValueFromPipeline = $true)]
+        [ValidateScript( {test-path $_})]
         [System.String]
         $CertificateFile,
 
-        [Parameter(Mandatory = $false, ParameterSetName="CertificateThumbprint")]
-        [ValidateSet("LocalMachine","CurrentUser")]
+        [Parameter(Mandatory = $false, ParameterSetName = "CertificateThumbprint")]
+        [ValidateSet("LocalMachine", "CurrentUser")]
         [System.String]
         $CertificateStore,
 
 
-        [Parameter(Mandatory = $true, ParameterSetName="KeyVault")]
+        [Parameter(Mandatory = $true, ParameterSetName = "KeyVault")]
         [System.String]
         $KeyVault,
 
-        [Parameter(Mandatory = $true, ParameterSetName="KeyVault")]
+        [Parameter(Mandatory = $true, ParameterSetName = "KeyVault")]
         [System.String]
         $SecretName
     )
 
     if ($PSCmdlet.ParameterSetName -eq 'KeyVault')
     {
+        if ($null -eq $script:AzureKeyVaultModule)
+        {
+            throw "Cannot find module Az.KeyVault or AzureRM.KeyVault installed on this system"
+        }
+
         try
         {
-            $keyVaultObject = Get-AzureRmKeyVault -VaultName $keyVault -ErrorAction Stop
+            $keyVaultObject = Get-PSCTAzKeyVault -VaultName $keyVault -ErrorAction Stop
         }
         catch
         {
-            throw "Unable to access KeyVault $KeyVault, ensure that the current session has access to it. Use Add-AzureRmAccount or Login-AzureRmAccount to establish access for the current session. $($_)"
+            throw "Unable to access KeyVault $KeyVault, ensure that the current session has access to it. Use Add-AzureRmAccount, Login-AzureRmAccount or ConnectAzAccount to establish access for the current session. $($_)"
         }
 
         if ($null -eq $keyVaultObject)
@@ -113,11 +118,11 @@ function Export-PSCredential
         }
 
         Write-Verbose -Message "Saving Credential to KeyVault $KeyVault"
-        Set-AzureKeyVaultSecret -VaultName $KeyVault -Name  $SecretName -SecretValue $Credential.Password -Tag @{username = $Credential.UserName}
+        Set-PSCTAzKeyVaultSecret -VaultName $KeyVault -Name  $SecretName -SecretValue $Credential.Password -Tag @{username = $Credential.UserName}
     }
     elseif ($PSBoundParameters.ContainsKey('Path'))
     {
-        $CredentialExport = New-Object -TypeName PSObject -Property @{Username = $Credential.UserName;Password = $null}
+        $CredentialExport = New-Object -TypeName PSObject -Property @{Username = $Credential.UserName; Password = $null}
 
         if ($PSCmdlet.ParameterSetName -eq 'LocalKey')
         {
@@ -134,7 +139,8 @@ function Export-PSCredential
                 $CredentialExport.Password = ConvertFrom-PKISecureString -SecureString $Credential.Password -Thumbprint $Thumbprint -Verbose:$Verbose
             }
         }
-        elseif ($PSCmdlet.ParameterSetName -eq 'CertFile') {
+        elseif ($PSCmdlet.ParameterSetName -eq 'CertFile')
+        {
             $CredentialExport.Password = ConvertFrom-PKISecureString -SecureString $Credential.Password -CertificateFile $CertificateFile -Verbose:$Verbose
         }
 
