@@ -45,43 +45,48 @@ function Import-PSCredential
     [CmdletBinding()]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName="LocalKey",Position=1)]
-        [Parameter(Mandatory = $true, ParameterSetName="CertificateThumbprint",Position=1)]
+        [Parameter(Mandatory = $true, ParameterSetName = "LocalKey", Position = 1)]
+        [Parameter(Mandatory = $true, ParameterSetName = "CertificateThumbprint", Position = 1)]
         [System.String]
         $Path,
 
-        [Parameter(Mandatory = $true, ParameterSetName="LocalKey")]
+        [Parameter(Mandatory = $true, ParameterSetName = "LocalKey")]
         [System.Security.SecureString]
         $SecureKey,
 
-        [Parameter(Mandatory = $true, ParameterSetName="CertificateThumbprint")]
+        [Parameter(Mandatory = $true, ParameterSetName = "CertificateThumbprint")]
         [ValidateNotNullorEmpty()]
         [System.String]$Thumbprint,
 
-        [Parameter(Mandatory = $false, ParameterSetName="CertificateThumbprint")]
-        [ValidateSet("LocalMachine","CurrentUser")]
+        [Parameter(Mandatory = $false, ParameterSetName = "CertificateThumbprint")]
+        [ValidateSet("LocalMachine", "CurrentUser")]
         [System.String]
         $CertificateStore,
 
-        [Parameter(Mandatory = $true, ParameterSetName="KeyVault")]
+        [Parameter(Mandatory = $true, ParameterSetName = "KeyVault")]
         [System.String]
         $KeyVault,
 
-        [Parameter(Mandatory = $true, ParameterSetName="KeyVault")]
+        [Parameter(Mandatory = $true, ParameterSetName = "KeyVault")]
         [System.String]
         $SecretName
     )
 
 
     if ($PSCmdlet.ParameterSetName -eq 'KeyVault')
-    {
+    {   
+        if ($null -eq $script:AzureKeyVaultModule)
+        {
+            throw "Cannot find module Az.KeyVault or AzureRM.KeyVault installed on this system"
+        }
+
         try
         {
-            $keyVaultObject = Get-AzureRmKeyVault -VaultName $keyVault -ErrorAction Stop
+            $keyVaultObject = Get-PSCTAzKeyVault -VaultName $keyVault -ErrorAction Stop
         }
         catch
         {
-            throw "Unable to access KeyVault $KeyVault, ensure that the current session has access to it. Use Add-AzureRmAccount or Login-AzureRmAccount to establish access for the current session. $($_)"
+            throw "Unable to access KeyVault $KeyVault, ensure that the current session has access to it. Use Add-AzureRmAccount, Login-AzureRmAccount or ConnectAzAccount to establish access for the current session. $($_)"
         }
 
         if ($null -eq $keyVaultObject)
@@ -90,7 +95,7 @@ function Import-PSCredential
         }
 
         Write-Verbose -Message "Reading credential object data from $KeyVault"
-        $SecretData = Get-AzureKeyVaultSecret -VaultName $KeyVault -Name $SecretName
+        $SecretData = Get-PSCTAzKeyVaultSecret -VaultName $KeyVault -Name $SecretName
 
         if ($null -eq $SecretData)
         {
@@ -103,7 +108,7 @@ function Import-PSCredential
             throw "$SecretName does not have a Username tag"
         }
 
-        New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList @($username,$SecretData.SecretValue)
+        New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList @($username, $SecretData.SecretValue)
 
     }
     elseif ($PSBoundParameters.ContainsKey('Path'))
@@ -125,6 +130,6 @@ function Import-PSCredential
             $SecureStringPassword = ConvertTo-PKISecureString -EncryptedString $CredentialImport.Password -Thumbprint $Thumbprint
         }
 
-        New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList @(($CredentialImport.UserName),$SecureStringPassword)
+        New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList @(($CredentialImport.UserName), $SecureStringPassword)
     }
 }

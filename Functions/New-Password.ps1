@@ -18,41 +18,26 @@
 #>
 function New-Password
 {
-	[CmdletBinding()]
-	param
+    [CmdletBinding()]
+    param
     (
         [Parameter()]
         [System.Int16]
         $Length = 16
-	)
+    )
 
-	$lowers = 'abcdefghiklmnprstuvwxyz'
-	$uppers = 'ABCDEFGHKLMNPRSTUVWXYZ'
-	$specials = '!@#%^&*()?.'
-	$numbers = '1234567890'
-	$all = $lowers + $uppers + $specials + $numbers 
-	
-	$password = ''
-	
-	#2 uppers
-	$password += $uppers[(Get-Random -Maximum $uppers.length)]
-	$password += $uppers[(Get-Random -Maximum $uppers.length)]
-	#2 numbers
-	$password += $numbers[(Get-Random -Maximum $numbers.length)]
-	$password += $numbers[(Get-Random -Maximum $numbers.length)]
-	#2 lowers
-	$password += $lowers[(Get-Random -Maximum $lowers.length)]
-	$password += $lowers[(Get-Random -Maximum $lowers.length)]
-	#2 specials
-	$password += $specials[(Get-Random -Maximum $specials.length)]
-	$password += $specials[(Get-Random -Maximum $specials.length)]
-	#fill the rest with random from all categories
-	for ($n=1;$n -le ($Length - 8); $n++ ){
-		$password += $all[(Get-Random -Maximum $all.length)]
-	}
+    [Reflection.Assembly]::LoadWithPartialName("System.Web") |out-null
 
-	#mix it up
-	$indices = Get-Random -inputobject (0.. ($Length -1)) -Count ($Length -1)
-	$private:ofs=''
-	return [System.String]$password[$indices]
+    do
+    {
+        $password = [System.Web.Security.Membership]::GeneratePassword($length, 2)
+        #GeneratePassword method, while likely to meet complexity requirements, is not guaranteed. Check for complexity and try again if needed
+
+        $UpperTest = ([regex]::matches($password, "[A-Z]") | Measure-Object).Count -ge 2
+        $LowerTest = ([regex]::matches($password, "[a-z]") | Measure-Object).Count -ge 2
+        $NumberTest = ([regex]::matches($password, "[0-9]") | Measure-Object).Count -ge 2
+        $SpecialsTest = ([regex]::matches($password, "[^a-zA-Z0-9]") | Measure-Object).Count -ge 2
+    } until ($UpperTest -and $LowerTest -and $NumberTest -and $SpecialsTest)
+
+    return $password
 }
