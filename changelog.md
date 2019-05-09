@@ -1,6 +1,6 @@
 # Release Notes
 
-## Unreleased
+## 1.1
 
 - Use .NET GeneratePassword method for random password generation instead of get-random
 - Set and use aliases for Azure KeyVault commands based on the module available on the system
